@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.css';
-
+import Navbar from './Navbar';
+import Home from './Home';
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+    <div className='flex flex-col gap-12'>
+    <Navbar/>
+    <Home/>
+    </div>
+   
   );
 }
 
