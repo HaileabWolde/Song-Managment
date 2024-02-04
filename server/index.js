@@ -3,7 +3,7 @@ import { config } from 'dotenv'
 import cookieParser from 'cookie-parser'
 import connectDB from './config/dbConnect.mjs'
 import ErrorObject from './utils/ErrorObject.js'
-
+import SongRoute from "./routes/songRoute.js"
 
 config()
 
@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.get('/', (req, res)=>{
     res.json('Hello')
 })
-
+app.use('/Songs', SongRoute)
 app.use(ErrorObject)
 const start = async()=>{
     try{
