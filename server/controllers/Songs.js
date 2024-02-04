@@ -4,7 +4,7 @@ import SongSchema from "../Model/SongModel.js"
 export const getAllSong = async(req ,res, next)=> {
     try{
         const AllSong = await SongSchema.find({})
-        res.status(200).json(AllSong);
+       return  res.status(200).json(AllSong);
 
     }
     catch(error){
@@ -16,7 +16,7 @@ export const getSingleSong  = async(req, res, next)=> {
     const {id} = req.params
     try{
         const SingleSong = await SongSchema.findById(id)
-        res.status(200).json(SingleSong)
+       return  res.status(200).json(SingleSong)
     }
     catch(error){
         console.log(error)
@@ -47,7 +47,7 @@ export const updateSong = async (req, res, next)=>{
 
     try{
         const UpdatedSong = await SongSchema.findByIdAndUpdate(id, req.body, {new: true})
-        res.status(200).json(UpdatedSong);
+       return  res.status(200).json(UpdatedSong);
     }
     catch(error){
         return next(error)
@@ -60,9 +60,53 @@ export const deleteSong = async(req, res, next)=> {
 
     try{
         const DeleteSong = await SongSchema.findByIdAndDelete(id)
-        res.status(200).json({msg: "Deleted Successfully"})
+       return  res.status(200).json({msg: "Deleted Successfully"})
     }
     catch(error){
+        return next(error)
+    }
+}
+
+export const getStats = async(req,res, next)=>{
+    try{
+        const totalSongs = await SongSchema.countDocuments();
+        const uniqueArtists = await SongSchema.distinct('Artist');
+       
+        const totalArtists = uniqueArtists.length;
+    
+        const uniqueAlbums = await SongSchema.distinct('Album');
+        const totalAlbums = uniqueAlbums.length;
+       
+        const uniqueGenres = await SongSchema.distinct('Genre');
+        const totalGenres = uniqueGenres.length;
+    
+        const genresCount = await SongSchema.aggregate([
+            { $group: { _id: '$Genre', count: { $sum: 1 } } }
+          ]);
+      
+          const artistSongsCount = await  SongSchema.aggregate([
+            { $group: { _id: '$Artist', totalSongs: { $sum: 1 } } }
+          ]);
+      
+          const artistAlbumsCount = await SongSchema.aggregate([
+            { $group: { _id: '$Artist', totalAlbums: { $sum: 1 } } }
+          ]);
+          const AlbumCountSong = await SongSchema.aggregate([
+            { $group: { _id: '$Album', totalSongs: { $sum: 1 } } }
+          ]);
+        return res.json({
+            totalSongs,
+            totalArtists,
+            totalAlbums,
+            totalGenres,
+            genresCount,
+            artistSongsCount,
+            artistAlbumsCount,
+            AlbumCountSong
+          });
+    }
+    catch(error){
+        console.log(error)
         return next(error)
     }
 }
