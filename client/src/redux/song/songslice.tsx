@@ -52,6 +52,9 @@ export const songSlice = createSlice({
     SignInId: (state, action)=> {
       state.currentId = action.payload;
     },
+    clearId: (state)=> {
+      state.currentId = null;
+    },
     SignInFailure: (state, action)=> {
       state.AllSongs = false;
       state.Loading = false;
@@ -61,6 +64,6 @@ export const songSlice = createSlice({
 });
 
 export const { SignInStart, SignInSuccess, SignInFailure, 
-  SignInCreate, SignInDelete, SignInId, SignInEdit} = songSlice.actions;
+  SignInCreate, SignInDelete, SignInId, SignInEdit,  clearId} = songSlice.actions;
 
 export default songSlice.reducer;

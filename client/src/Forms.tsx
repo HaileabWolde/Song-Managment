@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SignInStart, SignInCreate, SignInFailure, SignInEdit } from "./redux/song/songslice";
+import { SignInStart, SignInCreate, SignInFailure, SignInEdit, clearId } from "./redux/song/songslice";
 interface IState {
     people: {
         Title: string,
@@ -88,8 +88,23 @@ const Forms = ()=> {
             console.log(error)
         }
       }
+      dispatch(clearId())
+      setFormData({
+        Title: "",
+        Artist: "",
+        Album: "",
+        Genre: '' 
+        })
     }
-   
+ const handleClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+        dispatch(clearId())
+        setFormData({
+        Title: "",
+        Artist: "",
+        Album: "",
+        Genre: '' 
+        })
+ }
   useEffect(()=>{
     if(Song){
         setFormData(Song) 
@@ -139,7 +154,9 @@ const Forms = ()=> {
                    {Song ? 'EDIT' : 'SUBMIT'} 
                 </button>
                 <button
+                type="button"
                 className="p-2 bg-[#FF0000] text-white bg-opacity-70"
+                onClick={handleClear}
                 >
                     CLEAR
                 </button>
