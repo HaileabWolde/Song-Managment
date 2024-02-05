@@ -60,7 +60,7 @@ export const deleteSong = async(req, res, next)=> {
 
     try{
         const DeleteSong = await SongSchema.findByIdAndDelete(id)
-       return  res.status(200).json({msg: "Deleted Successfully"})
+       return  res.status(200).json(DeleteSong)
     }
     catch(error){
         return next(error)
