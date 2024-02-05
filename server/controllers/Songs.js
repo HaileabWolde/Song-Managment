@@ -50,6 +50,7 @@ export const updateSong = async (req, res, next)=>{
        return  res.status(200).json(UpdatedSong);
     }
     catch(error){
+        console.log(error.message)
         return next(error)
     }
 

@@ -1,6 +1,6 @@
 import {FaEdit, FaTrash} from 'react-icons/fa'
 import {useDispatch } from 'react-redux'
-import { SignInStart, SignInDelete, SignInFailure } from './redux/song/songslice'
+import { SignInStart, SignInDelete, SignInFailure ,  SignInId} from './redux/song/songslice'
 interface Nprops {
     song: {
       _id: string,
@@ -37,6 +37,10 @@ const Card = ({ song }: Nprops)=> {
       console.log(error)
   }
   }
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+    e.preventDefault()
+    dispatch(SignInId(song._id))
+  }
     return (
       <div className="flex flex-col gap-2 justify-center w-[40%] h-[40%] rounded-lg bg-white shadow-lg border px-4 my-2 cursor-pointer">
         <h1 className="font-serif font-semibold text-xl text-center"> {song.Title}</h1>
@@ -44,7 +48,7 @@ const Card = ({ song }: Nprops)=> {
       <p><span className="font-semibold hover:underline">Album:</span> {song.Album}</p>
       <p><span className="font-semibold hover:underline">Genre:</span> {song.Genre}</p>
       <div className='w-full flex justify-between'>
-        <button type="button"><FaEdit/></button>
+        <button type="button" onClick={handleEdit}><FaEdit/></button>
         <button type='button' onClick={handleDelete}><FaTrash/></button>
       </div>
       </div>

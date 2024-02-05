@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { SignInStart, SignInCreate, SignInFailure } from "./redux/song/songslice";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SignInStart, SignInCreate, SignInFailure, SignInEdit } from "./redux/song/songslice";
 interface IState {
     people: {
         Title: string,
@@ -9,8 +9,26 @@ interface IState {
         Genre: string
     }
 }
+interface SongStateONE {
+    song: {
+     AllSongs: null | any,
+     Error: null | boolean | {},
+     Loading: boolean,
+     currentId: null | string
+    }
+   }
+interface Song{
+    _id: string
+    Title: string,
+    Artist: string,
+    Album: string,
+    Genre: string
+}
 const Forms = ()=> {
     const dispatch = useDispatch();
+    const {currentId} = useSelector((state:SongStateONE)=> state.song)
+
+    const Song = useSelector((state: SongStateONE) => currentId ? (state.song.AllSongs.find((song: Song) => song._id === currentId)) : null);
     const [formdata, setFormData] = useState<IState["people"]>({
         Title: "",
         Artist: "",
@@ -26,30 +44,57 @@ const Forms = ()=> {
     }
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
-    const endpoint = 'http://localhost:5000/Songs/createSong'
 
-    try {
+    if(Song){
+        const endpoint = `http://localhost:5000/Songs/updateSong/${currentId}`
         dispatch(SignInStart());
         const res = await fetch(endpoint, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formdata),
-          });
-          const data = await res.json()
-          console.log(data)
-          if(data.success === false){
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formdata)})
+        const data = await res.json()
+        console.log(data)
+        if(data.success === false){
             dispatch(SignInFailure(data.message))
           }
           else{
-            dispatch(SignInCreate(data.result))
+            dispatch(SignInEdit(data))
           }
     }
-    catch(error){
-        console.log(error)
+    else{
+        const endpoint = 'http://localhost:5000/Songs/createSong'
+
+        try {
+            dispatch(SignInStart());
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formdata),
+              });
+              const data = await res.json()
+              console.log(data)
+              if(data.success === false){
+                dispatch(SignInFailure(data.message))
+              }
+              else{
+                dispatch(SignInCreate(data.result))
+              }
+        }
+        catch(error){
+            console.log(error)
+        }
+      }
     }
-  }
+   
+  useEffect(()=>{
+    if(Song){
+        setFormData(Song) 
+    }
+  }, [Song])
     return (
         <div className="w-[30%] h-[20%] bg-white px-4 pt-4 pb-6 flex flex-col gap-4">
             <h1 className="text-xl font-semibold text-center">Creating A Song </h1>
@@ -91,7 +136,7 @@ const Forms = ()=> {
                 className="p-2 font-bold text-white bg-[#313bac]"
                
                 >
-                    SUBMIT
+                   {Song ? 'EDIT' : 'SUBMIT'} 
                 </button>
                 <button
                 className="p-2 bg-[#FF0000] text-white bg-opacity-70"

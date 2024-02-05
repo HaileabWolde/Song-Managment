@@ -4,13 +4,15 @@ interface Iprops {
     people: {
         AllSongs: null | any,
         Error: null | boolean | {},
-        Loading: boolean
+        Loading: boolean,
+        currentId: string | null
     }
 }
 const initialState:  Iprops['people'] = {
   AllSongs: null,
   Error: null,
   Loading: false,
+  currentId: null
 };
 
 interface song {
@@ -39,10 +41,16 @@ export const songSlice = createSlice({
       state.Loading = false;
       state.Error = false;
     },
+    SignInEdit: (state, action)=>{
+      state.AllSongs = state.AllSongs.map((song: song)=> song._id === action.payload._id ? action.payload : song )
+    },
     SignInDelete: (state, action)=>{
       state.AllSongs = state.AllSongs.filter((song: song)=> song._id !== action.payload)
       state.Loading = false;
       state.Error = false;
+    },
+    SignInId: (state, action)=> {
+      state.currentId = action.payload;
     },
     SignInFailure: (state, action)=> {
       state.AllSongs = false;
@@ -52,6 +60,7 @@ export const songSlice = createSlice({
   },
 });
 
-export const { SignInStart, SignInSuccess, SignInFailure, SignInCreate, SignInDelete} = songSlice.actions;
+export const { SignInStart, SignInSuccess, SignInFailure, 
+  SignInCreate, SignInDelete, SignInId, SignInEdit} = songSlice.actions;
 
 export default songSlice.reducer;
