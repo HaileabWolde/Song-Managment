@@ -1,4 +1,4 @@
-import Cards from "./Cards"
+import Cards from "./Cards.js"
 import Forms from "./Forms"
 const Home = ()=> {
     return (
