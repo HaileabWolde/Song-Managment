@@ -25,9 +25,14 @@ export const songSlice = createSlice({
       state.Loading = false;
       state.Error = false;
     },
+    SignInFailure: (state, action)=> {
+      state.AllSongs = false;
+      state.Loading = false;
+      state.Error = action.payload
+    }
   },
 });
 
-export const { SignInStart, SignInSuccess } = songSlice.actions;
+export const { SignInStart, SignInSuccess, SignInFailure } = songSlice.actions;
 
 export default songSlice.reducer;

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SignInStart, SignInSuccess } from "./redux/song/songslice";
-
+import { SignInStart, SignInSuccess, SignInFailure } from "./redux/song/songslice";
+import Card from "./Card";
 interface SongStateONE {
  song: {
   AllSongs: null | any,
@@ -9,13 +9,17 @@ interface SongStateONE {
   Loading: boolean
  }
 }
+
+interface Song {
+  Title: string,
+  Artist: string,
+  Album: string,
+  Genre: string
+}
 const Cards = () => {
   const dispatch = useDispatch();
   const { AllSongs, Loading } = useSelector((state: SongStateONE) => state.song);
  
-  console.log(Loading);
-  console.log(AllSongs);
-  
   
   useEffect(() => {
     const fetchAllSongs = async () => {
@@ -30,7 +34,13 @@ const Cards = () => {
           },
         });
         const data = await res.json();
-        dispatch(SignInSuccess(data));
+        if(data.success === false){
+          dispatch(SignInFailure(data.message));
+        }
+        else{
+          dispatch(SignInSuccess(data));
+        }
+       
       } catch (error) {
         console.log(error);
       }
@@ -40,8 +50,12 @@ const Cards = () => {
   }, []);
 
   return (
-    <div className="w-[60%]">
-      <h1>Hello Motherfucker</h1>
+    <div className="w-[60%] flex justify-between flex-wrap">
+      {
+        AllSongs.map((song: Song)=> (
+          <Card song={song} key={song.Title}/>
+        ))
+      }
     </div>
   );
 };
