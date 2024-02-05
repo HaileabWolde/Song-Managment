@@ -2,10 +2,17 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SignInStart, SignInSuccess } from "./redux/song/songslice";
 
+interface SongStateONE {
+ song: {
+  AllSongs: null | any,
+  Error: null | boolean | {},
+  Loading: boolean
+ }
+}
 const Cards = () => {
   const dispatch = useDispatch();
-  const { AllSongs, Loading } = useSelector((state) => state.song);
-  
+  const { AllSongs, Loading } = useSelector((state: SongStateONE) => state.song);
+ 
   console.log(Loading);
   console.log(AllSongs);
   

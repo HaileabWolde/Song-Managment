@@ -1,6 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+interface Iprops {
+    people: {
+        AllSongs: null | any,
+        Error: null | boolean | {},
+        Loading: boolean
+    }
+}
+const initialState:  Iprops['people'] = {
   AllSongs: null,
   Error: null,
   Loading: false,
@@ -16,6 +23,7 @@ export const songSlice = createSlice({
     SignInSuccess: (state, action) => {
       state.AllSongs = action.payload;
       state.Loading = false;
+      state.Error = false;
     },
   },
 });
