@@ -111,8 +111,12 @@ const Forms = ()=> {
     }
   }, [Song])
     return (
+        
         <div className="w-[30%] h-[20%] bg-white px-4 pt-4 pb-6 flex flex-col gap-4">
+          
             <h1 className="text-xl font-semibold text-center">Creating A Song </h1>
+
+
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <input
                 type="text"
