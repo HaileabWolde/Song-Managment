@@ -1,6 +1,6 @@
 import {ErrorHandler} from "../middlewares/ErrorHandler.js"
 import SongSchema from "../Model/SongModel.js"
-
+import escapeStringRegexp from 'escape-string-regexp';
 export const getAllSong = async(req ,res, next)=> {
     try{
         const AllSong = await SongSchema.find({})
@@ -110,4 +110,28 @@ export const getStats = async(req,res, next)=>{
         console.log(error)
         return next(error)
     }
+}
+
+export const getSongBySearch = async(req, res)=> {
+    try{
+        const {searchInfo} = req.query
+
+        const searchQuery = escapeStringRegexp(searchInfo);
+
+        const genres = searchQuery.split(',').map((genre)=> genre.trim())
+        const genreQueries = genres.map((genre)=> new RegExp(genre, 'i'))
+        const Songs = await SongSchema.find({
+            $or: [
+                { Title: { $regex: new RegExp(searchQuery, 'i')}},
+                {Artist: { $regex: new RegExp(searchQuery, 'i')}},
+                {Album: { $regex: new RegExp(searchQuery, 'i')}},
+                {Genre:  { $in: genreQueries }}
+            ]
+        })
+        res.json({Songs});
+    }
+    catch(error){
+        res.status(400).json({message: error.message})
+    }
+
 }

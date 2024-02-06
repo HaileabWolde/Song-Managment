@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { SignInFailure, SignInSuccess, SignInDelete, SignInEdit, SignInCreate, SignInStatics} from './redux/song/songslice';
+import { SignInFailure, SignInSuccess, SignInDelete, SignInEdit, SignInCreate, SignInStatics, SearchSuccess} from './redux/song/songslice';
 import { PayloadAction } from '@reduxjs/toolkit';
 
 function* workGetAllSongFetch(): Generator<any, void, any> {
@@ -73,7 +73,26 @@ function*  workEditSong(action: PayloadAction<{ id: string; data: FormData }>): 
     throw error;
   }
 }
-
+function* SearchSong (action: PayloadAction<string>): Generator<any, void, any> {
+  const Data = action.payload;
+  const endpoint = `http://localhost:5000/Songs/search?searchInfo=${Data || 'none'}`;
+  try {
+    const res = yield call(fetch, endpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },});
+    const data = yield res.json();
+    console.log(data);
+    if (data.success === false) {
+      yield put(SignInFailure(data.message));
+    } else {
+      yield put(SearchSuccess(data.Songs));
+    }
+  } catch (error) {
+    throw error;
+  }
+}
 function* workCreateSong(action: PayloadAction<{ data: FormData }>):Generator<any, void, any> {
   const formData = action.payload;
   const {data: FormData} = formData
@@ -104,6 +123,7 @@ function* songSaga() {
   yield takeEvery('song/EditStart', workEditSong);
   yield takeEvery('song/CreateInStart', workCreateSong);
   yield takeEvery('song/StaticsStart', workGetStatics);
+  yield takeEvery('song/SearchStart', SearchSong);
 }
 
 export default songSaga;

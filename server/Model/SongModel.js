@@ -14,7 +14,7 @@ const songSchema = mongoose.Schema({
         
     },
     Genre: {
-        type: String,
+        type: [String],
         required: true
     }
 }, {timestamps: true})

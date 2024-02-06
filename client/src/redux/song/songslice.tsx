@@ -39,6 +39,12 @@ export const songSlice = createSlice({
     EditStart: (state, action)=>{
       state.Loading = true
     },
+    SearchStart: (state, action)=>{
+      state.Loading = true
+    },
+    SearchSuccess: (state, action)=>{
+      state.AllSongs = action.payload
+    },
     SignInSuccess: (state, action) => {
       state.AllSongs = action.payload;
       state.Loading = false;
@@ -82,6 +88,8 @@ export const songSlice = createSlice({
 });
 
 export const { SignInStart, SignInSuccess, SignInFailure, 
-  SignInCreate, SignInDelete, SignInId, SignInEdit,  clearId, SignInStatics, DeleteStart, EditStart, CreateInStart, StaticsStart} = songSlice.actions;
+  SignInCreate, SignInDelete, SignInId, SignInEdit,  
+  clearId, SignInStatics, DeleteStart, 
+  EditStart, CreateInStart, StaticsStart, SearchStart, SearchSuccess} = songSlice.actions;
 
 export default songSlice.reducer;
