@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SignInStart, SignInCreate, SignInFailure, SignInEdit, clearId } from "./redux/song/songslice";
+import {clearId, EditStart, CreateInStart } from "./redux/song/songslice";
 interface IState {
     people: {
         Title: string,
@@ -46,55 +46,19 @@ const Forms = ()=> {
     e.preventDefault();
 
     if(Song){
-        const endpoint = `http://localhost:5000/Songs/updateSong/${currentId}`
-        dispatch(SignInStart());
-        const res = await fetch(endpoint, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(formdata)})
-        const data = await res.json()
-        console.log(data)
-        if(data.success === false){
-            dispatch(SignInFailure(data.message))
-          }
-          else{
-            dispatch(SignInEdit(data))
-          }
-    }
-    else{
-        const endpoint = 'http://localhost:5000/Songs/createSong'
+        dispatch(EditStart({id: currentId, data: formdata }))
 
-        try {
-            dispatch(SignInStart());
-            const res = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formdata),
-              });
-              const data = await res.json()
-              console.log(data)
-              if(data.success === false){
-                dispatch(SignInFailure(data.message))
-              }
-              else{
-                dispatch(SignInCreate(data.result))
-              }
-        }
-        catch(error){
-            console.log(error)
-        }
-      }
-      dispatch(clearId())
-      setFormData({
-        Title: "",
-        Artist: "",
-        Album: "",
-        Genre: '' 
-        })
+    }
+   else{
+    dispatch(CreateInStart ({data: formdata}))
+   }
+   dispatch(clearId())
+   setFormData({
+     Title: "",
+     Artist: "",
+     Album: "",
+     Genre: '' 
+     })
     }
  const handleClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
         dispatch(clearId())

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SignInStart, SignInSuccess, SignInFailure } from "./redux/song/songslice";
+import { SignInStart} from "./redux/song/songslice";
 import Card from "./Card";
 interface SongStateONE {
  song: {
@@ -23,39 +23,18 @@ const Cards = () => {
  
   
   useEffect(() => {
-    const fetchAllSongs = async () => {
-      const endpoint = 'http://localhost:5000/Songs/AllSong';
-
-      try {
-        dispatch(SignInStart());
-        const res = await fetch(endpoint, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await res.json();
-        if(data.success === false){
-          dispatch(SignInFailure(data.message));
-        }
-        else{
-          dispatch(SignInSuccess(data));
-        }
+    dispatch(SignInStart());
        
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchAllSongs();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="w-[60%] flex justify-between flex-wrap">
       {
-        AllSongs.map((song: Song)=> (
-          <Card song={song} key={song.Title}/>
-        ))
+        AllSongs && AllSongs.length > 0 ? (
+          AllSongs.map((song: Song)=> (
+            <Card song={song} key={song.Title}/>
+          ))
+        ): null
       }
     </div>
   );

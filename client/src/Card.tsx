@@ -1,6 +1,6 @@
 import {FaEdit, FaTrash} from 'react-icons/fa'
+import { DeleteStart, SignInId} from './redux/song/songslice'
 import {useDispatch } from 'react-redux'
-import { SignInStart, SignInDelete, SignInFailure ,  SignInId} from './redux/song/songslice'
 interface Nprops {
     song: {
       _id: string,
@@ -10,32 +10,15 @@ interface Nprops {
       Genre: string
     }
   }
+
+
 const Card = ({ song }: Nprops)=> {
   const dispatch = useDispatch()
-  const handleDelete = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
-    e.preventDefault();
-    const endpoint = `http://localhost:5000/Songs/deleteSong/${song._id}`
 
-    try {
-      dispatch(SignInStart());
-      const res = await fetch(endpoint, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await res.json()
-        console.log(data)
-        if(data.success === false){
-          dispatch(SignInFailure(data.message))
-        }
-        else{
-          dispatch(SignInDelete(data._id))
-        }
-  }
-  catch(error){
-      console.log(error)
-  }
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+    e.preventDefault();
+    dispatch(DeleteStart(song._id))
+    
   }
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
     e.preventDefault()

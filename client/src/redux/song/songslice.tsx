@@ -4,7 +4,7 @@ interface Iprops {
     people: {
         AllSongs: null | any,
         Error: null | boolean | {},
-        Loading: boolean,
+        Loading: boolean | string,
         currentId: string | null,
         Statics: {} | null
     }
@@ -33,6 +33,12 @@ export const songSlice = createSlice({
     SignInStart: (state) => {
       state.Loading = true;
     },
+    DeleteStart: (state, action)=>{
+      state.Loading = true;
+    },
+    EditStart: (state, action)=>{
+      state.Loading = true
+    },
     SignInSuccess: (state, action) => {
       state.AllSongs = action.payload;
       state.Loading = false;
@@ -42,6 +48,9 @@ export const songSlice = createSlice({
       state.AllSongs = [...state.AllSongs, action.payload];
       state.Loading = false;
       state.Error = false;
+    },
+    CreateInStart: (state, action)=>{
+      state.Loading = true;
     },
     SignInEdit: (state, action)=>{
       state.AllSongs = state.AllSongs.map((song: song)=> song._id === action.payload._id ? action.payload : song )
@@ -59,11 +68,13 @@ export const songSlice = createSlice({
       state.Loading = false;
       state.Error = false;
     },
+    StaticsStart:(state)=> {
+      state.Loading = false
+    },
     clearId: (state)=> {
       state.currentId = null;
     },
     SignInFailure: (state, action)=> {
-      state.AllSongs = false;
       state.Loading = false;
       state.Error = action.payload
     }
@@ -71,6 +82,6 @@ export const songSlice = createSlice({
 });
 
 export const { SignInStart, SignInSuccess, SignInFailure, 
-  SignInCreate, SignInDelete, SignInId, SignInEdit,  clearId, SignInStatics} = songSlice.actions;
+  SignInCreate, SignInDelete, SignInId, SignInEdit,  clearId, SignInStatics, DeleteStart, EditStart, CreateInStart, StaticsStart} = songSlice.actions;
 
 export default songSlice.reducer;
