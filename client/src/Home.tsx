@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { css } from "@emotion/react"
 import {useDispatch } from "react-redux"
 import { SearchStart} from "./redux/song/songslice"
 import Cards from "./Cards"
@@ -14,9 +15,11 @@ const Home = ()=> {
       }
       
   }
+ 
     return (
-        <div className="w-full ">
-          <div className="w-[25%] mx-auto mb-4 flex">
+        <div className="w-full">
+          <div 
+          className="w-[25%] mx-auto mb-4 flex">
               <input
               type="text"
               placeholder="Search By Title, Album, Song or Genre"
