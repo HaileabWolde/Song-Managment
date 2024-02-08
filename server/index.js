@@ -19,7 +19,12 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"], // Add any other headers you need
   }));
 app.use(cookieParser());
-
+app.use(cors({
+    origin: ["https://song-managment.netlify.app", "http://localhost:5000"],
+    methods: ["POST", "GET", "DELETE", "PUT"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"], // Add any other headers you need
+  }));
 app.get('/', (req, res)=>{
     res.json('Hello Motherfucker')
 })
