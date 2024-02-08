@@ -21,7 +21,7 @@ app.use(cors({
 app.use(cookieParser());
 
 app.get('/', (req, res)=>{
-    res.json('Hello')
+    res.json('Hello Motherfucker')
 })
 app.use('/Songs', SongRoute)
 app.use(ErrorObject)
