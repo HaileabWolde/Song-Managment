@@ -15,7 +15,7 @@ function* workGetAllSongFetch(): Generator<any, void, any> {
 }
 
 function* workGetStatics() : Generator<any, void, any> {
-  const Statics =  yield call(() => fetch('https://songbackend-6eee.onrender.com/Songs/statics'));
+  const Statics =  yield call(() => fetch('https://backend-ez3z.onrender.com/Songs/statics'));
 
   const data = yield Statics.json()
   if(data.success === false){
@@ -28,7 +28,7 @@ function* workGetStatics() : Generator<any, void, any> {
 
 function* workDeleteSong(action: PayloadAction<string>): Generator<any, void, any> {
   const songId = action.payload;
-  const endpoint = `https://songbackend-6eee.onrender.com/Songs/deleteSong/${songId}`;
+  const endpoint = `https://backend-ez3z.onrender.com/Songs/deleteSong/${songId}`;
 
   try {
     const res = yield call(fetch, endpoint, {
@@ -53,7 +53,7 @@ function*  workEditSong(action: PayloadAction<{ id: string; data: FormData }>): 
   const formData = action.payload;
   const { id, data:formdata } = formData;
  
-  const endpoint = `https://songbackend-6eee.onrender.com/Songs/updateSong/${id}`;
+  const endpoint = `https://backend-ez3z.onrender.com/Songs/updateSong/${id}`;
   try {
     const res = yield call(fetch, endpoint, {
       method: 'PUT',
@@ -75,7 +75,7 @@ function*  workEditSong(action: PayloadAction<{ id: string; data: FormData }>): 
 }
 function* SearchSong (action: PayloadAction<string>): Generator<any, void, any> {
   const Data = action.payload;
-  const endpoint = `https://songbackend-6eee.onrender.com/Songs/search?searchInfo=${Data || 'none'}`;
+  const endpoint = `https://backend-ez3z.onrender.com/Songs/search?searchInfo=${Data || 'none'}`;
   try {
     const res = yield call(fetch, endpoint, {
       method: 'GET',
@@ -97,7 +97,7 @@ function* workCreateSong(action: PayloadAction<{ data: FormData }>):Generator<an
   const formData = action.payload;
   const {data: FormData} = formData
  
-  const endpoint = `https://songbackend-6eee.onrender.com/Songs/createSong`;
+  const endpoint = `https://backend-ez3z.onrender.com/Songs/createSong`;
   try {
     const res = yield call(fetch, endpoint, {
       method: 'POST',
